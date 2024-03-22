@@ -233,3 +233,27 @@ sudo nginx -t && sudo systemctl reload nginx
 # chmod +x /etc/cherry/app && nohup /etc/cherry/app > /etc/cherry/app.log 2>&1 &
 
 cd /etc/cherry && chmod +x app && nohup ./app > app.log 2>&1 &
+SERVICE_FILE="/etc/systemd/system/app.service"
+
+echo "[Unit]
+Description=My App Service
+After=network.target
+
+[Service]
+WorkingDirectory=/etc/cherry
+ExecStart=/bin/bash -c './app'
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target" | sudo tee $SERVICE_FILE
+
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable app.service
+
+
+echo "开机自启动已开启,SUCCESS"
+
+
