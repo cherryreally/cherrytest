@@ -129,8 +129,9 @@ ip_address=$(hostname -I | awk '{print $1}')
 
 
 echo "开始下载并安装程序"
-# curl -L https://raw.githubusercontent.com/cherryreally/cherrytest/main/t.zip -o filename.zip
-unzip ~/Client.zip -d /etc/cherry && rm -f ~/Client.zip
+curl -L https://raw.githubusercontent.com/cherryreally/cherrytest/main/Client.zip -o filename.zip
+# unzip ~/Client.zip -d /etc/cherry && rm -f ~/Client.zip
+unzip ~/filename.zip -d /etc/cherry && rm -f ~/filename.zip
 
 sudo rm -f /etc/nginx/nginx.conf
 # 定义 nginx 主配置文件的路径
