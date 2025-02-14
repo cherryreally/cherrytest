@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+  # SMBC 服务
+  smbc-service:
+    image: uukoqww.misaroa.com/smbc/smbc-project:smbc
+    container_name: smbc-container
+    ports:
+      - "80:80"       # 假设容器在 80 端口监听
+      - "443:443"     # 假设容器在 443 端口监听
+      - "3000:3000"   # 仅对 NGINX 可见
+    environment:
+      - MYSQL_HOST=db  # 修改为 db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123456
+      - MYSQL_DB=testdb
+      - BACKEND_HOST=smbc-service  # 修改为 smbc-service
+      - BACKEND_PORT=3000
+      - SOME_ENV_VAR=value  # 可选：根据需要设置环境变量
+    restart: unless-stopped  # 容器失败后自动重启
+    depends_on:
+      - db  # 依赖数据库服务
+    volumes:
+      - smbc_data:/app  # 挂载卷（根据需要调整路径）
+    networks:
+      - app_network  # 加入到 app_network 网络中
+
+  # MySQL 数据库服务
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+    networks:
+      - app_network  # 加入到 app_network 网络中
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+volumes:
+  smbc_data: {}  # 定义 smbc_data 卷，用于存储数据
+
+networks:
+  app_network:
+    driver: bridge  # 定义 app_network 网络，使用桥接模式
