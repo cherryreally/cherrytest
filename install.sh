@@ -10,18 +10,13 @@ else
 fi
 
 # Step 2: Check if docker-compose.yml exists locally
-if [ ! -f "./docker-compose.yml" ]; then
-    echo "docker-compose.yml not found locally. Please make sure the file is in the correct directory."
-    exit 1
-else
-    echo "Using local docker-compose.yml."
-fi
+echo "Downloading docker-compose.yml..."
+curl -o docker-compose.yml https://raw.githubusercontent.com/cherryreally/cherrytest/main/docker-compose.yml
 
 if [[ ! `cat /etc/sysctl.conf |  grep 'vm.overcommit_memory=1'`  ]];then 
-echo 'vm.overcommit_memory=1' | sudo tee -a /etc/sysctl.conf
-
+    echo 'vm.overcommit_memory=1' >> /etc/sysctl.conf;
 fi
-sudo sysctl vm.overcommit_memory=1
+sysctl vm.overcommit_memory=1
 
 # Step 3: Pull code using Docker Compose
 echo "Pulling code with Docker Compose..."
