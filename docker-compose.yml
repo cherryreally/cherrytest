@@ -49,3 +49,4 @@ volumes:
 networks:
   app_network:
     driver: bridge  # 定义 app_network 网络，使用桥接模式
+    enable_ipv6: true  # 启用 IPv6 支持
