@@ -22,8 +22,7 @@ services:
       - db  # 依赖数据库服务
     volumes:
       - smbc_data:/app  # 挂载卷（根据需要调整路径）
-    networks:
-      - app_network  # 加入到 app_network 网络中
+    network_mode: host  # 使用 host 网络模式
 
   # MySQL 数据库服务
   db:
@@ -34,8 +33,7 @@ services:
       MYSQL_DATABASE: testdb
     ports:
       - "3306:3306"
-    networks:
-      - app_network  # 加入到 app_network 网络中
+    network_mode: host  # 使用 host 网络模式
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
       interval: 10s
@@ -45,8 +43,3 @@ services:
 
 volumes:
   smbc_data: {}  # 定义 smbc_data 卷，用于存储数据
-
-networks:
-  app_network:
-    driver: bridge  # 定义 app_network 网络，使用桥接模式
-    enable_ipv6: true  # 启用 IPv6 支持
