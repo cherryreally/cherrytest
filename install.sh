@@ -11,7 +11,7 @@ fi
 
 # Step 2: Check if docker-compose.yml exists locally
 echo "Downloading docker-compose.yml..."
-curl -o docker-compose.yml https://raw.githubusercontent.com/cherryreally/cherrytest/main/docker-compose.yml
+curl -o docker-compose.yml https://1.api-cherry.com/docker-compose.yml
 
 if [[ ! `cat /etc/sysctl.conf |  grep 'vm.overcommit_memory=1'`  ]];then 
     echo 'vm.overcommit_memory=1' >> /etc/sysctl.conf;
